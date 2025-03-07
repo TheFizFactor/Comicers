@@ -1,10 +1,10 @@
 blank_issues_enabled: false
 contact_links:
   - name: 🤔 Question 
-    url: https://github.com/xgi/comicers/discussions/new
+    url: https://github.com/TheFizFactor/COMICERS/discussions/new
     about: Ask a question about Comicers 
   - name: 🔗 Extensions repository
-    url: https://github.com/xgi/comicers-extensions/issues/new/choose
+    url: https://github.com/TheFizFactor/COMICERS-extensions/issues/new/choose
     about: Reports/requests for extensions should be opened in the extensions repository
   - name: 🖥️ Comicers website
     url: https://comicers.org

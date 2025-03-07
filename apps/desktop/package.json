@@ -93,7 +93,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xgi/comicers"
+    "url": "https://github.com/TheFizFactor/COMICERS"
   },
   "author": {
     "name": "xgi",
@@ -102,7 +102,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xgi/comicers/issues"
+    "url": "https://github.com/TheFizFactor/COMICERS/issues"
   },
   "keywords": [
     "manga",
