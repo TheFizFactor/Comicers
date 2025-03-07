@@ -20,7 +20,7 @@ import {
 import { formDataFromObject } from '@/main/util/net';
 import { MALTrackerMetadata } from '@/common/temp_tracker_metadata';
 
-const CLIENT_ID = '217d11dc032b71dd35c60c7204b07a65';
+const CLIENT_ID = 'da33fd0a72e2c77f1b30552407ca5ed2';
 const BASE_URL = 'https://api.myanimelist.net/v2';
 const OAUTH_BASE_URL = 'https://myanimelist.net/v1/oauth2';
 
@@ -156,7 +156,6 @@ export class MALTrackerClient extends TrackerClientAbstract {
       body: formDataFromObject({
         client_id: CLIENT_ID,
         code,
-        // We use the code_challenge as the verifier here because MAL only uses PKCE plain (WTF?)
         code_verifier: this.latestPkceCode.code_challenge,
         grant_type: 'authorization_code',
       }),

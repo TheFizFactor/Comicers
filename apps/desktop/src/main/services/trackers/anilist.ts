@@ -12,7 +12,7 @@ import {
 import { TrackEntry, TrackerMetadata, TrackScoreFormat, TrackStatus } from '@/common/models/types';
 import { AniListTrackerMetadata } from '@/common/temp_tracker_metadata';
 
-const clientId = '5631';
+const clientId = '23253';
 
 const STATUS_MAP: { [key: string]: TrackStatus } = {
   CURRENT: TrackStatus.Reading,

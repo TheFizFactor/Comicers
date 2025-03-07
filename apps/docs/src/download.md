@@ -30,7 +30,7 @@ Comicers version {{ release.version }} was released on {{ release.releaseDateStr
 </tbody>
 </table>
 
-> Additional versions are available from the [GitHub releases page](https://github.com/TheFizFactor/COMICERS/releases).
+> Additional versions are available from the [GitHub releases page](https://github.com/TheFizFactor/comicers/releases).
 
 ## Updating
 
