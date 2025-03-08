@@ -14,10 +14,15 @@ export interface Release {
 
 const defaultRelease: Release = {
   version: '0.0.0',
-  releaseDateStr: new Date().toLocaleDateString(),
+  releaseDateStr: 'Not yet released',
   releaseDaysAgo: 0,
   assets: []
 };
+
+// Format date consistently to avoid hydration mismatches
+function formatDate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
 
 // For VitePress data loading format
 export default {
@@ -73,9 +78,9 @@ export default {
         });
       }
 
-      // Update the data object
+      // Update the data object with consistent date format
       data.version = release.tag_name?.replace('v', '') || defaultRelease.version;
-      data.releaseDateStr = date.toLocaleDateString();
+      data.releaseDateStr = formatDate(date);
       data.releaseDaysAgo = Math.round((new Date().getTime() - date.getTime()) / (1000 * 3600 * 24));
       data.assets = validAssets;
 

@@ -10,9 +10,9 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "biome lint src",
-    "dist:win": "pnpm electron-builder --publish onTagOrDraft --win",
-    "dist:mac": "pnpm electron-builder --publish onTagOrDraft --mac",
-    "dist:linux": "pnpm electron-builder --publish onTagOrDraft --linux"
+    "dist:win": "pnpm electron-builder --publish always --win",
+    "dist:mac": "pnpm electron-builder --publish always --mac",
+    "dist:linux": "pnpm electron-builder --publish always --linux"
   },
   "build": {
     "productName": "Comicers",
