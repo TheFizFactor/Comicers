@@ -6,7 +6,7 @@ next: false
 <script setup>
 import { onMounted, ref } from 'vue'
 import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue"
-import releaseData, { data as initialData } from '@theme/data/release.data'
+import { data as initialData, load } from '@theme/data/release.data'
 
 // Initialize with the exported data
 const release = ref(initialData)
@@ -16,7 +16,7 @@ const error = ref(false)
 onMounted(async () => {
   try {
     // Load fresh data using the exported function
-    release.value = await releaseData.load()
+    release.value = await load()
   } catch (e) {
     error.value = true
     console.error('Failed to load release data:', e)
