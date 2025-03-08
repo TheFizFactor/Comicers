@@ -42,7 +42,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-cache-
       - name: Create pnpm store directory
-        run: mkdir -p $(pnpm store path)
+        run: if not exist $(pnpm store path) mkdir $(pnpm store path)
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
