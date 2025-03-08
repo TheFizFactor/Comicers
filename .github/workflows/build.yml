@@ -36,8 +36,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/Library/Caches/electron
-            ~/Library/Caches/electron-builder
+            ${{ runner.os == 'Windows' && '%LOCALAPPDATA%\electron\Cache' || '~/Library/Caches/electron' }}
+            ${{ runner.os == 'Windows' && '%LOCALAPPDATA%\electron-builder\Cache' || '~/Library/Caches/electron-builder' }}
           key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-electron-cache-
