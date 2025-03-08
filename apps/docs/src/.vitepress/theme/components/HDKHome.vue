@@ -87,12 +87,15 @@ main {
         font-size: 1.125rem;
         padding: 0.25rem 1rem;
       }
+
+      >a:first-child {
+        color: rgba(19, 19, 19, 0.952); /* Dark but not fully black color for better readability */
+      }
     }
 
     >div.screenshot {
       margin-top: 2rem;
       width: 100%;
-      background-color: var(--vp-code-bg);
       border-radius: 1rem;
 
       display: flex;
@@ -100,7 +103,7 @@ main {
       align-items: center;
       position: relative;
 
-      background-image: linear-gradient(to top right, #3b82f6, #a855f7, #6366f1);
+      background-image: linear-gradient(to top right, #23232400, #42773d4b, #43b43f);
 
       >img {
         border-radius: 0.5rem;

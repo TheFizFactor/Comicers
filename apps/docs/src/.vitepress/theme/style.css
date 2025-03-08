@@ -49,10 +49,17 @@
   --vp-c-default-3: var(--vp-c-gray-3);
   --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --vp-c-brand-1: var(--vp-c-indigo-1);
-  --vp-c-brand-2: var(--vp-c-indigo-2);
-  --vp-c-brand-3: var(--vp-c-indigo-3);
-  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+  /* Lime green brand colors */
+  --vp-c-lime-1: #7fcc4d;      /* Darker shade for text and active states */
+  --vp-c-lime-2: #9CEE69;      /* Our main brand color */
+  --vp-c-lime-3: #b0f583;      /* Lighter shade for backgrounds */
+  --vp-c-lime-soft: rgba(156, 238, 105, 0.16); /* Subtle background version */
+
+  /* Set brand colors to use our lime colors */
+  --vp-c-brand-1: var(--vp-c-lime-1);
+  --vp-c-brand-2: var(--vp-c-lime-2);
+  --vp-c-brand-3: var(--vp-c-lime-3);
+  --vp-c-brand-soft: var(--vp-c-lime-soft);
 
   --vp-c-tip-1: var(--vp-c-brand-1);
   --vp-c-tip-2: var(--vp-c-brand-2);
@@ -94,14 +101,14 @@
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
-    #bd34fe 30%,
-    #41d1ff
+    #9CEE69 30%,
+    #7fcc4d
   );
 
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    #bd34fe 50%,
-    #47caff 50%
+    #9CEE69 50%,
+    #b0f583 50%
   );
   --vp-home-hero-image-filter: blur(44px);
 }
