@@ -4,31 +4,23 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node: ['22']
+        os: [macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-
-    - name: Install dependencies
-      run: |
-        npm install -g pnpm@10.6.1
-        pnpm install
-
-    - name: Ensure required directories exist
-      run: |
-        mkdir -p /Users/runner/setup-pnpm/node_modules/.bin/store/v3/files
-
-    - name: Prune pnpm store
-      run: pnpm store prune
-
-    - name: Run build
-      run: pnpm run build
-
-    - name: Run lint
-      run: pnpm run lint
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Clean pnpm store
+        run: pnpm store prune
+      - name: Install dependencies
+        run: pnpm install
+      - run: pnpm build
+      - run: pnpm lint
