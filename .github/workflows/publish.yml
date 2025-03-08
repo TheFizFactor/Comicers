@@ -40,7 +40,7 @@ jobs:
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile --network-timeout=600000
+        run: pnpm i --no-frozen-lockfile --fetch-timeout 600000
       # Split the build step to prevent timeout issues
       - name: Build app
         run: pnpm build
@@ -82,7 +82,7 @@ jobs:
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile --network-timeout=600000
+        run: pnpm i --no-frozen-lockfile --fetch-timeout 600000
       - run: pnpm dist:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -124,7 +124,7 @@ jobs:
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile --network-timeout=600000
+        run: pnpm i --no-frozen-lockfile --fetch-timeout 600000
       - run: pnpm dist:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
