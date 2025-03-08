@@ -5,7 +5,7 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs';
 export default defineConfig({
   title: 'Comicers',
   description: 'Free manga reader for the desktop',
-  head: [['link', { rel: 'icon', href: '/logo.svg' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -13,7 +13,7 @@ export default defineConfig({
       { text: 'Documentation', link: '/guides/getting-started' },
     ],
 
-    logo: '/logo.svg',
+    logo: '/logo.png',
 
     sidebar: [
       {
