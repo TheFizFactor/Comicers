@@ -12,53 +12,76 @@ export interface Release {
   assets: ReleaseAsset[];
 }
 
-declare const data: Release;
-export { data };
+const defaultRelease: Release = {
+  version: '0.0.0',
+  releaseDateStr: new Date().toLocaleDateString(),
+  releaseDaysAgo: 0,
+  assets: []
+};
 
 export default {
   async load(): Promise<Release> {
-    const release = await fetch('https://api.github.com/repos/TheFizFactor/comicers/releases/latest').then(
-      (response) => response.json(),
-    );
+    try {
+      const response = await fetch('https://api.github.com/repos/TheFizFactor/comicers/releases/latest');
+      if (!response.ok) {
+        return defaultRelease;
+      }
 
-    const date = new Date(release.published_at);
-    const assets = {
-      windows: release.assets.find((asset) => /Comicers-Setup-.*\.exe$/.test(asset.name)),
-      windowsportable: release.assets.find((asset) => /Comicers-\d.*exe$/.test(asset.name)),
-      mac: release.assets.find((asset) => asset.name.endsWith('.dmg')),
-      linux: release.assets.find((asset) => asset.name.endsWith('.AppImage')),
-    };
+      const release = await response.json();
+      const date = new Date(release.published_at);
+      
+      // Safely find assets
+      const findAsset = (pattern: RegExp) => 
+        release.assets?.find((asset: any) => pattern.test(asset.name)) || null;
 
-    return {
-      version: release.tag_name.replace('v', ''),
-      releaseDateStr: date.toLocaleDateString(),
-      releaseDaysAgo: Math.round((new Date().getTime() - date.getTime()) / (1000 * 3600 * 24)),
-      assets: [
-        {
+      const assets = {
+        windows: findAsset(/Comicers-Setup-.*\.exe$/),
+        mac: findAsset(/\.dmg$/),
+        linux: findAsset(/\.AppImage$/)
+      };
+
+      // Only include assets that were found
+      const validAssets: ReleaseAsset[] = [];
+
+      if (assets.windows) {
+        validAssets.push({
           platform: 'Windows',
           name: assets.windows.name,
           browser_download_url: assets.windows.browser_download_url,
-          buildTimeStr: new Date(assets.windows.updated_at).toISOString(),
-        },
-        // {
-        //   platform: 'Windows Portable',
-        //   name: assets.windowsportable.name,
-        //   browser_download_url: assets.windowsportable.browser_download_url,
-        //   buildTimeStr: new Date(assets.windowsportable.updated_at).toISOString(),
-        // },
-        {
+          buildTimeStr: new Date(assets.windows.updated_at).toISOString()
+        });
+      }
+
+      if (assets.mac) {
+        validAssets.push({
           platform: 'macOS',
           name: assets.mac.name,
           browser_download_url: assets.mac.browser_download_url,
-          buildTimeStr: new Date(assets.mac.updated_at).toISOString(),
-        },
-        {
+          buildTimeStr: new Date(assets.mac.updated_at).toISOString()
+        });
+      }
+
+      if (assets.linux) {
+        validAssets.push({
           platform: 'Linux',
           name: assets.linux.name,
           browser_download_url: assets.linux.browser_download_url,
-          buildTimeStr: new Date(assets.linux.updated_at).toISOString(),
-        },
-      ],
-    };
-  },
+          buildTimeStr: new Date(assets.linux.updated_at).toISOString()
+        });
+      }
+
+      return {
+        version: release.tag_name?.replace('v', '') || defaultRelease.version,
+        releaseDateStr: date.toLocaleDateString(),
+        releaseDaysAgo: Math.round((new Date().getTime() - date.getTime()) / (1000 * 3600 * 24)),
+        assets: validAssets
+      };
+    } catch (error) {
+      console.error('Failed to load release data:', error);
+      return defaultRelease;
+    }
+  }
 };
+
+// Export initial data
+export const data: Release = defaultRelease;

@@ -5,41 +5,63 @@ next: false
 ---
 
 <script setup>
-import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue";
-import { data as release } from '@theme/data/release.data'
+import { onMounted, ref } from 'vue'
+import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue"
+import releaseData, { data as initialData } from '@theme/data/release.data'
+
+const release = ref(initialData)
+const loading = ref(true)
+const error = ref(false)
+
+onMounted(async () => {
+  try {
+    release.value = await releaseData.load()
+  } catch (e) {
+    error.value = true
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 # Download
 
-Comicers version {{ release.version }} was released on {{ release.releaseDateStr }} ({{ release.releaseDaysAgo }} days ago).
+<div v-if="loading">Loading release information...</div>
 
-<table class="downloadTable">
-<thead>
-<tr>
-  <th>Platform</th>
-  <th>Download</th>
-  <th>Built</th>
-</tr>
-</thead>
-<tbody>
-<tr v-for="asset in release.assets" :key="asset.platform">
-  <td>{{ asset.platform }}</td>
-  <td><VPButton :href="asset.browser_download_url" :text="asset.name" theme="brand" /></td>
-  <td>{{ asset.buildTimeStr }}</td>
-</tr>
-</tbody>
-</table>
+<div v-else-if="error">Failed to load release information. Please try again later.</div>
 
-> Additional versions are available from the [GitHub releases page](https://github.com/TheFizFactor/comicers/releases).
+<div v-else>
+  <p>Comicers version {{ release.version }} was released on {{ release.releaseDateStr }} ({{ release.releaseDaysAgo }} days ago).</p>
 
-## Updating
+  <table class="downloadTable" v-if="release.assets.length">
+    <thead>
+      <tr>
+        <th>Platform</th>
+        <th>Download</th>
+        <th>Built</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="asset in release.assets" :key="asset.platform">
+        <td>{{ asset.platform }}</td>
+        <td><VPButton :href="asset.browser_download_url" :text="asset.name" theme="brand" /></td>
+        <td>{{ asset.buildTimeStr }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-Comicers checks for updates automatically when the client starts. You will be prompted when an update is available.
+  <p v-else>No downloads are currently available.</p>
 
-## Next steps
+  <blockquote>
+    <p>Additional versions are available from the <a href="https://github.com/TheFizFactor/comicers/releases">GitHub releases page</a>.</p>
+  </blockquote>
 
-Check the [Getting Started](./guides/getting-started) guide.
+  <h2>Updating</h2>
+  <p>Comicers checks for updates automatically when the client starts. You will be prompted when an update is available.</p>
 
+  <h2>Next steps</h2>
+  <p>Check the <a href="./guides/getting-started">Getting Started</a> guide.</p>
+</div>
 
 <style scoped>
 .downloadTable {
