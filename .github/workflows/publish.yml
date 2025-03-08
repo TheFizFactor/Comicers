@@ -137,7 +137,6 @@ jobs:
 
   publish-docs:
     runs-on: ubuntu-latest
-    # Giving this job a specific permissions set for GitHub Pages
     permissions:
       contents: write
       pages: write
@@ -154,14 +153,14 @@ jobs:
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
       - name: Install docs dependencies
-        run: cd docs && pnpm i
+        run: cd apps/docs && pnpm i
       - name: Build docs
-        run: cd docs && pnpm build
-      - name: Copy CNAME file
-        run: cp docs/CNAME docs/src/.vitepress/dist/
+        run: cd apps/docs && pnpm build
+      - name: Create CNAME file in dist directory
+        run: echo "comicers.org" > apps/docs/src/.vitepress/dist/CNAME
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/src/.vitepress/dist
+          publish_dir: ./apps/docs/src/.vitepress/dist
           force_orphan: true # This creates a clean gh-pages branch without history
