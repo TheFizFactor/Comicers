@@ -19,10 +19,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - name: Create pnpm store directory
+        run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
-        run: pnpm store prune
+        run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm i --no-frozen-lockfile
       - run: pnpm dist:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,10 +43,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - name: Create pnpm store directory
+        run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
-        run: pnpm store prune
+        run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm i --no-frozen-lockfile
       - run: pnpm dist:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,10 +67,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - name: Create pnpm store directory
+        run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
-        run: pnpm store prune
+        run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm i --no-frozen-lockfile
       - run: pnpm dist:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
