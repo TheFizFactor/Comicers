@@ -42,8 +42,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-cache-
       - name: Create pnpm store directory
-        shell: cmd
-        run: mkdir .pnpm-store\v3 2>nul || echo Directory exists
+        shell: pwsh
+        run: New-Item -Path ".pnpm-store\v3" -ItemType Directory -Force
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
