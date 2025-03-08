@@ -28,7 +28,7 @@ jobs:
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
+          path: ${{ runner.os == 'Windows' && '.pnpm-store\v3' || '~/.pnpm-store' }}
           key: ${{ runner.os }}-node-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-cache-
