@@ -19,15 +19,39 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+      # Cache electron binaries to speed up builds
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~\AppData\Local\electron\Cache
+            ~\AppData\Local\electron-builder\Cache
+          key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-cache-
+      # Windows-specific optimization for the npm registry connection
+      - name: Configure npm registry
+        run: |
+          npm config set registry http://registry.npmjs.org/
+          npm config set strict-ssl false
       - name: Create pnpm store directory
         run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile
-      - run: pnpm dist:win
+        run: pnpm i --no-frozen-lockfile --network-timeout 600000
+      # Split the build step to prevent timeout issues
+      - name: Build app
+        run: pnpm build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+      - name: Package Windows app
+        run: pnpm dist:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: "--max_old_space_size=4096"
+
   publish-linux:
     strategy:
       matrix:
@@ -43,15 +67,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+          key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-cache-
       - name: Create pnpm store directory
         run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile
+        run: pnpm i --no-frozen-lockfile --network-timeout 600000
       - run: pnpm dist:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: "--max_old_space_size=4096"
+
   publish-mac:
     strategy:
       matrix:
@@ -67,15 +103,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python dependencies
+        run: pip install setuptools
+      - name: Cache Electron
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/Library/Caches/electron
+            ~/Library/Caches/electron-builder
+          key: ${{ runner.os }}-electron-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-cache-
       - name: Create pnpm store directory
         run: mkdir -p $(pnpm store path)
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile
+        run: pnpm i --no-frozen-lockfile --network-timeout 600000
       - run: pnpm dist:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: "--max_old_space_size=4096"
           # APPLE_ID: ${{ secrets.APPLE_ID }}
           # APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
           # CSC_LINK: ${{ secrets.CSC_LINK }}
