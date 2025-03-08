@@ -137,6 +137,10 @@ jobs:
 
   publish-docs:
     runs-on: ubuntu-latest
+    # Giving this job a specific permissions set for GitHub Pages
+    permissions:
+      contents: write
+      pages: write
     steps:
       - uses: actions/checkout@v4
       - name: Install pnpm
@@ -149,11 +153,15 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
+      - name: Install docs dependencies
+        run: cd docs && pnpm i
       - name: Build docs
         run: cd docs && pnpm build
+      - name: Copy CNAME file
+        run: cp docs/CNAME docs/src/.vitepress/dist/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/src/.vitepress/dist
-          cname: comicers.org
+          force_orphan: true # This creates a clean gh-pages branch without history
