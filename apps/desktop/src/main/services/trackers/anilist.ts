@@ -46,7 +46,7 @@ export class AniListTrackerClient extends TrackerClientAbstract {
   };
 
   getAuthUrl: GetAuthUrlFunc = () => {
-    return `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&response_type=token`;
+    return `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&response_type=token&redirect_uri=comicers://auth/callback`;
   };
 
   getToken: GetTokenFunc = (code: string) => {

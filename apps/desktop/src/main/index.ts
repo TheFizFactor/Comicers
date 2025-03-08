@@ -30,6 +30,15 @@ console.info(`Starting Comicers main process (client version ${packageJson.versi
 let mainWindow: BrowserWindow | null = null;
 let spoofWindow: BrowserWindow | null = null;
 
+// Register the app as the default handler for the custom protocol
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('comicers', process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('comicers');
+}
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -44,6 +53,15 @@ protocol.registerSchemesAsPrivileged([
     scheme: 'atom',
     privileges: {
       supportFetchAPI: true,
+    },
+  },
+  {
+    scheme: 'comicers',
+    privileges: {
+      secure: true,
+      standard: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
     },
   },
 ]);
@@ -117,6 +135,47 @@ const createWindows = async () => {
   });
 };
 
+// Handle the protocol. In this case, we choose to show the window and load the URL
+// This is where we'll handle OAuth callbacks
+function handleAuthCallback(url: string) {
+  if (!mainWindow) return;
+  
+  const urlObj = new URL(url);
+  // Extract the code parameter from the URL
+  const code = urlObj.searchParams.get('code');
+  
+  if (code) {
+    // Send the auth code to the renderer process
+    mainWindow.webContents.send(ipcChannels.TRACKERS.AUTH_CALLBACK, code);
+    mainWindow.focus();
+  }
+}
+
+// Windows: register protocol handler callback
+if (process.platform === 'win32') {
+  // Windows: handle protocol when app is already running
+  app.on('second-instance', (event, commandLine) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+    
+    // The commandLine is array of strings in which the first element is the path to the app
+    // and the second element could be the custom protocol URL
+    const url = commandLine.find((arg) => arg.startsWith('comicers://'));
+    if (url) handleAuthCallback(url);
+  });
+}
+
+// macOS & Linux: handle protocol
+app.on('open-url', (event, url) => {
+  event.preventDefault();
+  if (url.startsWith('comicers://')) {
+    handleAuthCallback(url);
+  }
+});
+
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
@@ -140,6 +199,17 @@ app
         method: req.method,
         headers: req.headers,
         body: req.body,
+      });
+    });
+
+    // Handle comicers:// protocol
+    protocol.handle('comicers', (request) => {
+      const url = request.url;
+      handleAuthCallback(url);
+      
+      // Return a success message to the browser
+      return new Response('<html><body>Authentication successful! You can close this window.</body></html>', {
+        headers: { 'Content-Type': 'text/html' }
       });
     });
   })

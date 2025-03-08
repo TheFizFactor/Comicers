@@ -140,7 +140,7 @@ export class MALTrackerClient extends TrackerClientAbstract {
   getAuthUrl: GetAuthUrlFunc = () => {
     const pkceCode: { code_challenge: string; code_verifier: string } = pkceChallenge();
     this.latestPkceCode = pkceCode;
-    return `${OAUTH_BASE_URL}/authorize?client_id=${CLIENT_ID}&code_challenge=${pkceCode.code_challenge}&response_type=code`;
+    return `${OAUTH_BASE_URL}/authorize?client_id=${CLIENT_ID}&code_challenge=${pkceCode.code_challenge}&response_type=code&redirect_uri=comicers://auth/callback`;
   };
 
   getToken: GetTokenFunc = (code: string) => {

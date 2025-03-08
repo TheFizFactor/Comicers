@@ -18,12 +18,15 @@ const release = ref({
 })
 const loading = ref(true)
 const error = ref(false)
+const debugInfo = ref(null)
 
 onMounted(async () => {
   try {
     // Use the VitePress data loader pattern
     const releaseData = await import('@theme/data/release.data')
-    release.value = await releaseData.default.load()
+    const data = await releaseData.default.load()
+    release.value = data
+    debugInfo.value = data.debug
   } catch (e) {
     error.value = true
     console.error('Failed to load release data:', e)
@@ -55,6 +58,14 @@ onMounted(async () => {
     </tbody>
   </table>
   <p v-else>No downloads are currently available.</p>
+  
+  <div v-if="debugInfo" class="debug-info">
+    <details>
+      <summary>Debug Information</summary>
+      <pre>{{ JSON.stringify(debugInfo, null, 2) }}</pre>
+    </details>
+  </div>
+  
   <blockquote>
     <p>Additional versions are available from the <a href="https://github.com/TheFizFactor/comicers/releases">GitHub releases page</a>.</p>
   </blockquote>
@@ -68,5 +79,20 @@ onMounted(async () => {
   a {
     text-decoration: none;
   }
+}
+.debug-info {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+}
+.debug-info details {
+  color: #666;
+  cursor: pointer;
+}
+.debug-info pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 12px;
 }
 </style>

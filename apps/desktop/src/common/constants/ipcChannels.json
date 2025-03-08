@@ -62,6 +62,9 @@
   "TRACKER_MANAGER": {
     "GET_ALL": "tracker-manager-get-alls"
   },
+  "TRACKERS": {
+    "AUTH_CALLBACK": "tracker-auth-callback"
+  },
   "TRACKER": {
     "GET_AUTH_URLS": "tracker-getAuthUrls",
     "GET_TOKEN": "tracker-getToken",
