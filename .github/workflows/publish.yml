@@ -36,7 +36,8 @@ jobs:
           npm config set registry http://registry.npmjs.org/
           npm config set strict-ssl false
       - name: Create pnpm store directory
-        run: mkdir -p $(pnpm store path)
+        shell: pwsh
+        run: New-Item -Path ".pnpm-store\v3" -ItemType Directory -Force
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
