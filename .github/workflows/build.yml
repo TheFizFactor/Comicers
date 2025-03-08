@@ -39,7 +39,7 @@ jobs:
       - name: Clean pnpm store
         run: pnpm store prune || true
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --network-timeout 600000
+        run: pnpm install --no-frozen-lockfile --network-timeout=600000
       - name: Build
         run: pnpm build
         env:
