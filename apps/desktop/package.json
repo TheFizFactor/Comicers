@@ -87,7 +87,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "xgi",
+      "owner": "TheFizFactor",
       "repo": "comicers"
     }
   },
@@ -96,8 +96,8 @@
     "url": "https://github.com/TheFizFactor/comicers"
   },
   "author": {
-    "name": "xgi",
-    "email": "xgi@faltro.com",
+    "name": "TheFizFactor",
+    "email": "TheFizFactor@faltro.com",
     "url": "https://faltro.com"
   },
   "license": "MIT",

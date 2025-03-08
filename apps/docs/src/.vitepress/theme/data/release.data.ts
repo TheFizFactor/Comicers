@@ -17,7 +17,7 @@ export { data };
 
 export default {
   async load(): Promise<Release> {
-    const release = await fetch('https://api.github.com/repos/xgi/comicers/releases/latest').then(
+    const release = await fetch('https://api.github.com/repos/TheFizFactor/comicers/releases/latest').then(
       (response) => response.json(),
     );
 

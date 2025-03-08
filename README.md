@@ -1,8 +1,8 @@
 [![comicers screenshot](assets/comicers_screenshot.webp)](https://comicers.org)
 
 [![comicers.org](https://img.shields.io/badge/website-comicers.org-7048E8?style=flat-square)](https://comicers.org)
-[![GitHub release](https://img.shields.io/github/v/release/xgi/comicers?style=flat-square)](https://github.com/TheFizFactor/comicers/releases)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/xgi/comicers/publish.yml?branch=master&style=flat-square)
+[![GitHub release](https://img.shields.io/github/v/release/TheFizFactor/comicers?style=flat-square)](https://github.com/TheFizFactor/comicers/releases)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/TheFizFactor/comicers/publish.yml?branch=master&style=flat-square)
 
 Comicers is a free and open source manga reader for the desktop.
 
@@ -53,7 +53,7 @@ non-shared behavior.
 **Storage**: Library data and settings are saved with `localStorage`. Thumbnails are stored in
 the user-data path.
 
-**Plugins/Extensions**: See the [Tiyo](https://github.com/xgi/tiyo) repo. Dynamic loading is handled by [aki-plugin-manager](https://github.com/xgi/aki-plugin-manager).
+**Plugins/Extensions**: See the [Tiyo](https://github.com/TheFizFactor/tiyo) repo. Dynamic loading is handled by [aki-plugin-manager](https://github.com/TheFizFactor/aki-plugin-manager).
 
 ## Content Sources
 
@@ -61,7 +61,7 @@ Comicers allows users to import manga from their filesystem (e.g. as zip files
 or folders of images). To read manga from 3rd-party "content sources", the
 Tiyo plugin can be installed from the Plugins tab in the client.
 
-To learn about Tiyo or request a new content source, please go to https://github.com/xgi/tiyo
+To learn about Tiyo or request a new content source, please contact me at fiz@comicers.com
 
 ## License
 

@@ -36,7 +36,7 @@ const Plugins: React.FC = () => {
 
     await aki
       // TODO hack
-      .search('author:xgi @tiyo/core', '', 1)
+      .search('author:TheFizFactor @tiyo/core', '', 1)
       // biome-ignore lint/suspicious/noExplicitAny: TODO external schema
       .then((results: any) => {
         if (results.objects.length > 0) {
