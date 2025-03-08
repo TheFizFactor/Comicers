@@ -19,7 +19,15 @@ const defaultRelease: Release = {
   assets: []
 };
 
+// Create a data object that will be dynamically updated after loading
+export const data: Release = { ...defaultRelease };
+
+// Default export with the load function
 export default {
+  // Including data property for direct access
+  data,
+  
+  // Load function that fetches release data
   async load(): Promise<Release> {
     try {
       const response = await fetch('https://api.github.com/repos/TheFizFactor/comicers/releases/latest');
@@ -52,7 +60,7 @@ export default {
         });
       }
 
-      if (assets.mac) {
+      if (assets.mac && assets.mac.name) {
         validAssets.push({
           platform: 'macOS',
           name: assets.mac.name,
@@ -61,7 +69,7 @@ export default {
         });
       }
 
-      if (assets.linux) {
+      if (assets.linux && assets.linux.name) {
         validAssets.push({
           platform: 'Linux',
           name: assets.linux.name,
@@ -70,18 +78,18 @@ export default {
         });
       }
 
-      return {
+      // Update the exported data object
+      Object.assign(data, {
         version: release.tag_name?.replace('v', '') || defaultRelease.version,
         releaseDateStr: date.toLocaleDateString(),
         releaseDaysAgo: Math.round((new Date().getTime() - date.getTime()) / (1000 * 3600 * 24)),
         assets: validAssets
-      };
+      });
+
+      return data;
     } catch (error) {
       console.error('Failed to load release data:', error);
       return defaultRelease;
     }
   }
 };
-
-// Export initial data
-export const data: Release = defaultRelease;
