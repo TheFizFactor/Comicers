@@ -154,7 +154,7 @@ function handleAuthCallback(url: string) {
 // Windows: register protocol handler callback
 if (process.platform === 'win32') {
   // Windows: handle protocol when app is already running
-  app.on('second-instance', (event, commandLine) => {
+  app.on('second-instance', (_event, commandLine) => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
