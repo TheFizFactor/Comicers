@@ -4,19 +4,26 @@ prev: false
 next: false
 ---
 <script setup>
-import { onMounted, ref } from 'vue'
+import { useData } from 'vitepress'
+import { ref, onMounted } from 'vue'
 import VPButton from "vitepress/dist/client/theme-default/components/VPButton.vue"
-import { data as initialData, load } from '@theme/data/release.data'
 
-// Initialize with the exported data
-const release = ref(initialData)
+const { theme } = useData()
+// Initialize an empty release state that will be populated
+const release = ref({
+  version: '0.0.0',
+  releaseDateStr: new Date().toLocaleDateString(),
+  releaseDaysAgo: 0,
+  assets: []
+})
 const loading = ref(true)
 const error = ref(false)
 
 onMounted(async () => {
   try {
-    // Load fresh data using the exported function
-    release.value = await load()
+    // Use the VitePress data loader pattern
+    const releaseData = await import('@theme/data/release.data')
+    release.value = await releaseData.default.load()
   } catch (e) {
     error.value = true
     console.error('Failed to load release data:', e)
